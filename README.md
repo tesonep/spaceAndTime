@@ -1,4 +1,4 @@
-# spaceAndTime
+# Pharo Space and Time
 An small project to add some statistics generating code for used space and time for Pharo.
 
 Right now it includes only a simple tool to analyze space usage by a graph of objects.
@@ -17,7 +17,7 @@ It gives:
 - statisticsPerClass: a collection of GraphSpaceStatisticsPerClass with the information for each of the classes the graph have instances.
 - statisticsPerClassCSV: a simple CSV to import in your favorite analysis and graphing tool.
 
-###Usage
+### Usage
 
 ```
 stats := GraphStatistics new
