@@ -6,8 +6,9 @@ But more to come.
 
 ## Installation
 
-```Metacello new
-    baselline: 'spaceAndTime';
+```
+Metacello new
+    baseline: 'spaceAndTime';
     repository: 'github://tesonep/spaceAndTime';
     yourself
 ```
