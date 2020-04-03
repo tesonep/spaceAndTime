@@ -4,6 +4,14 @@ An small project to add some statistics generating code for used space and time 
 Right now it includes only a simple tool to analyze space usage by a graph of objects.
 But more to come.
 
+## Installation
+
+```Metacello new
+    baselline: 'spaceAndTime';
+    repository: 'github://tesonep/spaceAndTime';
+    yourself
+```
+
 ## GraphSpaceStatistics
 
 This is the class that can be used to inspect the statistics of space usage of a given graph of objects.
