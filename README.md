@@ -8,9 +8,9 @@ But more to come.
 
 ```
 Metacello new
-    baseline: 'spaceAndTime';
-    repository: 'github://tesonep/spaceAndTime';
-    yourself
+    baseline: 'SpaceAndTime';
+    repository: 'github://tesonep/spaceAndTime/';
+    load.
 ```
 
 ## GraphSpaceStatistics
