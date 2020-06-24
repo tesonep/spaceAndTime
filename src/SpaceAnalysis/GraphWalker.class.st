@@ -8,15 +8,27 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'root',
-		'visitedObjects'
+		'visitedObjects',
+		'ignoreReferencesToClasses'
 	],
 	#category : #SpaceAnalysis
 }
+
+{ #category : #accessing }
+GraphWalker >> ignoreReferencesToClasses [
+	^ ignoreReferencesToClasses
+]
+
+{ #category : #accessing }
+GraphWalker >> ignoreReferencesToClasses: anObject [
+	ignoreReferencesToClasses := anObject
+]
 
 { #category : #initialization }
 GraphWalker >> initialize [
 	
 	super initialize.
+	ignoreReferencesToClasses := false.
 	visitedObjects := IdentitySet new.
 ]
 
@@ -35,12 +47,16 @@ GraphWalker >> rootObject: anObject [
 { #category : #anObject }
 GraphWalker >> visitObject: anObject [
 
-	(visitedObjects includes: anObject) ifTrue: [ ^ self ].
+	(ignoreReferencesToClasses and: [anObject isKindOf: Behavior]) 
+		ifTrue: [ ^ self ].
+
+	(anObject class isImmediateClass or: [visitedObjects includes: anObject]) ifTrue: [ ^ self ].
+		
+	visitedObjects add: anObject.
 	
 	self withAllReferencesFrom: anObject do: [ :aReferenced |
 		self visitObject: aReferenced ].
 	
-	visitedObjects add: anObject
 	
 	
 ]
@@ -53,10 +69,17 @@ GraphWalker >> visitedObjects [
 { #category : #visiting }
 GraphWalker >> withAllReferencesFrom: anObject do: aBlockClosure [ 
 	
-	self withAllSlotsOf: anObject do: [ :anSlot |
+"	self withAllSlotsOf: anObject do: [ :anSlot |
 		aBlockClosure value: (anSlot read: anObject ) ].
+"		
+	1 to: anObject class instSize do: [ :anIndex | 
+		aBlockClosure value: (anObject instVarAt: anIndex) ].
 	
 	"For variable objects"
+
+	anObject isCompiledMethod ifTrue: [ 
+		anObject allLiterals do: aBlockClosure. ^ self ].
+
 	1 to: anObject basicSize	do: [ :anIndex |
 		aBlockClosure value: (anObject basicAt: anIndex)]
 

@@ -26,6 +26,12 @@ GraphSpaceStatistics >> collectedObjects [
 ]
 
 { #category : #accessing }
+GraphSpaceStatistics >> ignoreReferencesToClasses [
+
+	walker ignoreReferencesToClasses: true
+]
+
+{ #category : #accessing }
 GraphSpaceStatistics >> rootObject: anObject [
 
  	walker := GraphWalker new
