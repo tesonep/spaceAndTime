@@ -29,7 +29,7 @@ It gives:
 ### Usage
 
 ```
-stats := GraphStatistics new
+stats := GraphSpaceStatistics new
 	rootObject: rootOfTheGraph;
 	yourself.
 
