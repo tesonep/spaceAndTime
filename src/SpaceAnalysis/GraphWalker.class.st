@@ -77,7 +77,7 @@ GraphWalker >> withAllReferencesFrom: anObject do: aBlockClosure [
 	
 	"For variable objects"
 
-	anObject isCompiledMethod ifTrue: [ 
+	(anObject isCompiledBlock or: [ anObject isCompiledMethod ]) ifTrue: [ 
 		anObject allLiterals do: aBlockClosure. ^ self ].
 
 	1 to: anObject basicSize	do: [ :anIndex |
