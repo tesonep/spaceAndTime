@@ -9,26 +9,15 @@ Class {
 	#instVars : [
 		'root',
 		'visitedObjects',
-		'ignoreReferencesToClasses'
+		'statistics'
 	],
 	#category : #SpaceAnalysis
 }
-
-{ #category : #accessing }
-GraphWalker >> ignoreReferencesToClasses [
-	^ ignoreReferencesToClasses
-]
-
-{ #category : #accessing }
-GraphWalker >> ignoreReferencesToClasses: anObject [
-	ignoreReferencesToClasses := anObject
-]
 
 { #category : #initialization }
 GraphWalker >> initialize [
 	
 	super initialize.
-	ignoreReferencesToClasses := false.
 	visitedObjects := IdentitySet new.
 ]
 
@@ -44,10 +33,22 @@ GraphWalker >> rootObject: anObject [
 	root := anObject
 ]
 
+{ #category : #accessing }
+GraphWalker >> statistics [
+
+	^ statistics
+]
+
+{ #category : #accessing }
+GraphWalker >> statistics: anObject [
+
+	statistics := anObject
+]
+
 { #category : #anObject }
 GraphWalker >> visitObject: anObject [
 
-	(ignoreReferencesToClasses and: [anObject isKindOf: Behavior]) 
+	(statistics shouldIgnore: anObject)
 		ifTrue: [ ^ self ].
 
 	(anObject class isImmediateClass or: [visitedObjects includes: anObject]) ifTrue: [ ^ self ].
@@ -79,6 +80,9 @@ GraphWalker >> withAllReferencesFrom: anObject do: aBlockClosure [
 
 	(anObject isCompiledBlock or: [ anObject isCompiledMethod ]) ifTrue: [ 
 		anObject allLiterals do: aBlockClosure. ^ self ].
+	
+	"If a byte array, or word array, do not scan anything"
+	anObject class isBytes ifTrue: [ ^ self ].
 
 	1 to: anObject basicSize	do: [ :anIndex |
 		aBlockClosure value: (anObject basicAt: anIndex)]

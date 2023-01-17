@@ -15,7 +15,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'walker',
-		'statisticsPerClass'
+		'statisticsPerClass',
+		'ignoredObjects',
+		'ignoreReferencesToClasses',
+		'ignorePredicates'
 	],
 	#category : #SpaceAnalysis
 }
@@ -26,9 +29,30 @@ GraphSpaceStatistics >> collectedObjects [
 ]
 
 { #category : #accessing }
+GraphSpaceStatistics >> ignore: anObject [
+
+	ignoredObjects add: anObject
+]
+
+{ #category : #accessing }
 GraphSpaceStatistics >> ignoreReferencesToClasses [
 
-	walker ignoreReferencesToClasses: true
+	ignoreReferencesToClasses := true
+]
+
+{ #category : #accessing }
+GraphSpaceStatistics >> ignoreWhen: aBlock [
+
+	ignorePredicates add: aBlock
+]
+
+{ #category : #accessing }
+GraphSpaceStatistics >> initialize [
+
+	super initialize.
+	ignoreReferencesToClasses := false.
+	ignoredObjects := IdentitySet new.
+	ignorePredicates := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -36,7 +60,21 @@ GraphSpaceStatistics >> rootObject: anObject [
 
  	walker := GraphWalker new
 		rootObject: anObject;
+		statistics: self;
 		yourself
+]
+
+{ #category : #asserting }
+GraphSpaceStatistics >> shouldIgnore: anObject [
+
+	(ignoreReferencesToClasses and: [ anObject isKindOf: Behavior ]) 
+		ifTrue: [ ^ true ].
+
+	(ignoredObjects includes: anObject) ifTrue: [ ^ true ].
+	(ignorePredicates anySatisfy: [ :e | e value: anObject ])
+		ifTrue: [ ^ true ].
+
+	^ false
 ]
 
 { #category : #statistics }
