@@ -49,7 +49,6 @@ GraphWalker >> statistics: anObject [
 GraphWalker >> visitObject: anObject [
 
 	(statistics shouldIgnore: anObject) ifTrue: [ ^ self ].
-	(anObject class isImmediateClass) ifTrue: [ ^ self  ].
 	(visitedObjects includes: anObject) ifTrue: [ ^ self ].
 
 	visitedObjects add: anObject.
