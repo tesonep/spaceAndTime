@@ -54,6 +54,14 @@ GraphWalker >> visitObject: anObject [
 
 	visitedObjects add: anObject.
 
+	"There is a problem with an infinite recursion when calculating the size of a SpPresenter new.
+	It is cause because of iterating the instance variables this way. Se we iterate with the slots.
+	I do not which way is better to iterate an object's instanfce variables.
+	So I use the slots since they work. "
+
+	"1 to: anObject class instSize do: [ :anIndex |
+		aBlockClosure value: (anObject instVarAt: anIndex) ]."
+
 	anObject class allSlots
 		reject: [ :anSlot | anSlot isVirtual or: [ anSlot class = WeakSlot ] ]
 		thenDo: [ :anSlot | self visitObject: (anSlot read: anObject) ].
