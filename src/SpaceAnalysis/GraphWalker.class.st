@@ -55,7 +55,7 @@ GraphWalker >> visitObject: anObject [
 	visitedObjects add: anObject.
 
 	anObject class allSlots
-		reject: [ :anSlot | anSlot isVirtual ]
+		reject: [ :anSlot | anSlot isVirtual and: [ anSlot class = WeakSlot ] ]
 		thenDo: [ :anSlot | self visitObject: (anSlot read: anObject) ].
 
 	"For variable objects"
