@@ -21,7 +21,7 @@ GraphSpaceStatisticsPerClass class >> forClass: aClass forObjects: aCollection [
 ]
 
 { #category : #initialization }
-GraphSpaceStatisticsPerClass >> initializeWithClass: aClass andObjects: aCollection [ 
+GraphSpaceStatisticsPerClass >> initializeWithClass: aClass andObjects: aCollection [
 
 	targetClass := aClass.
 	instances := aCollection size.
@@ -30,19 +30,21 @@ GraphSpaceStatisticsPerClass >> initializeWithClass: aClass andObjects: aCollect
 
 { #category : #accessing }
 GraphSpaceStatisticsPerClass >> instances [
+
 	^ instances
 ]
 
 { #category : #accessing }
 GraphSpaceStatisticsPerClass >> memorySize [
-	
+
 	^ totalSize
 ]
 
 { #category : #printing }
 GraphSpaceStatisticsPerClass >> printOn: aStream [
+
 	super printOn: aStream.
-	aStream 
+	aStream
 		nextPutAll: ' ( ';
 		print: targetClass name;
 		nextPutAll: ' inst: ';
@@ -54,5 +56,6 @@ GraphSpaceStatisticsPerClass >> printOn: aStream [
 
 { #category : #accessing }
 GraphSpaceStatisticsPerClass >> targetClass [
+
 	^ targetClass
 ]

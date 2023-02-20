@@ -23,30 +23,31 @@ Class {
 	#category : #SpaceAnalysis
 }
 
-{ #category : #statistics }
+{ #category : #'api - statistics' }
 GraphSpaceStatistics >> collectedObjects [
+
 	^ walker iterateAllGraph visitedObjects
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GraphSpaceStatistics >> ignore: anObject [
 
 	ignoredObjects add: anObject
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GraphSpaceStatistics >> ignoreReferencesToClasses [
 
 	ignoreReferencesToClasses := true
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GraphSpaceStatistics >> ignoreWhen: aBlock [
 
 	ignorePredicates add: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GraphSpaceStatistics >> initialize [
 
 	super initialize.
@@ -55,7 +56,7 @@ GraphSpaceStatistics >> initialize [
 	ignorePredicates := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : #api }
 GraphSpaceStatistics >> rootObject: anObject [
 
  	walker := GraphWalker new
@@ -64,62 +65,60 @@ GraphSpaceStatistics >> rootObject: anObject [
 		yourself
 ]
 
-{ #category : #asserting }
+{ #category : #api }
 GraphSpaceStatistics >> shouldIgnore: anObject [
 
-	(ignoreReferencesToClasses and: [ anObject isKindOf: Behavior ]) 
+	(ignoreReferencesToClasses and: [ anObject isKindOf: Behavior ])
 		ifTrue: [ ^ true ].
 
 	(ignoredObjects includes: anObject) ifTrue: [ ^ true ].
-	(ignorePredicates anySatisfy: [ :e | e value: anObject ])
-		ifTrue: [ ^ true ].
+	(ignorePredicates anySatisfy: [ :e | e value: anObject ]) ifTrue: [ ^ true ].
 
 	^ false
 ]
 
-{ #category : #statistics }
+{ #category : #'api - statistics' }
 GraphSpaceStatistics >> statisticsPerClass [
-	
+
 	| classDictionary |
-	
+
 	statisticsPerClass ifNotNil: [ ^ statisticsPerClass ].
-	
+
 	classDictionary := IdentityDictionary new.
-	self collectedObjects do: [ :anObject | 
+	self collectedObjects do: [ :anObject |
 			(classDictionary at: anObject class ifAbsentPut: [ IdentitySet new ])
 				add: anObject ].
-	
-	^ statisticsPerClass := classDictionary associations 
-		collect: [ :anAssociation | GraphSpaceStatisticsPerClass 
-				forClass: anAssociation key 
-				forObjects: anAssociation value ] 
+
+	^ statisticsPerClass := classDictionary associations
+		collect: [ :anAssociation | GraphSpaceStatisticsPerClass
+				forClass: anAssociation key
+				forObjects: anAssociation value ]
 		as: OrderedCollection
 ]
 
-{ #category : #printing }
+{ #category : #'api - statistics' }
 GraphSpaceStatistics >> statisticsPerClassCSV [
-	
-	^ String streamContents: [ :anStream | 
-		anStream 
+
+	^ String streamContents: [ :anStream |
+		anStream
 			nextPutAll: '"Class name"'; nextPut: $,;
 			nextPutAll: '"# Instances"'; nextPut: $,;
 			nextPutAll: '"Size in Memory"'; nextPut: $,.
-			
-		self statisticsPerClass do: [ :anEntry | 
+
+		self statisticsPerClass do: [ :anEntry |
 			anStream crlf;
 				nextPutAll: '"'; nextPutAll: anEntry targetClass name asString; nextPutAll: '"'; nextPut: $,;
 				nextPutAll: '"'; nextPutAll: anEntry instances printString ; nextPutAll: '"'; nextPut: $,;
-				nextPutAll: '"'; nextPutAll: anEntry memorySize printString; nextPutAll: '"' ]	].
-			
+				nextPutAll: '"'; nextPutAll: anEntry memorySize printString; nextPutAll: '"' ] ]
 ]
 
-{ #category : #statistics }
+{ #category : #'api - statistics' }
 GraphSpaceStatistics >> totalInstances [
 	^ self collectedObjects size
 ]
 
-{ #category : #statistics }
+{ #category : #'api - statistics' }
 GraphSpaceStatistics >> totalSizeInBytes [
 
-	^ self collectedObjects sumNumbers: [ :anObject | anObject sizeInMemory ] 
+	^ self collectedObjects sumNumbers: [ :anObject | anObject sizeInMemory ]
 ]
