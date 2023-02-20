@@ -53,16 +53,16 @@ GraphSpaceStatistics >> initialize [
 	super initialize.
 	ignoreReferencesToClasses := false.
 	ignoredObjects := IdentitySet new.
-	ignorePredicates := OrderedCollection new
+	ignorePredicates := OrderedCollection new.
+	walker := GraphWalker new
+		          statistics: self;
+		          yourself
 ]
 
 { #category : #api }
 GraphSpaceStatistics >> rootObject: anObject [
 
- 	walker := GraphWalker new
-		rootObject: anObject;
-		statistics: self;
-		yourself
+	walker rootObject: anObject
 ]
 
 { #category : #api }

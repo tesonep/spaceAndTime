@@ -30,7 +30,8 @@ GraphWalker >> iterateAllGraph [
 { #category : #accessing }
 GraphWalker >> rootObject: anObject [
 
-	root := anObject
+	root := anObject.
+	visitedObjects removeAll
 ]
 
 { #category : #accessing }
@@ -72,12 +73,4 @@ GraphWalker >> visitObject: anObject [
 GraphWalker >> visitedObjects [
 
 	^ visitedObjects
-]
-
-{ #category : #visiting }
-GraphWalker >> withAllSlotsOf: anObject do: aBlockClosure [
-
-	anObject class allSlots
-		reject: [ :anSlot | anSlot isVirtual ]
-		thenDo: aBlockClosure
 ]
