@@ -30,6 +30,12 @@ GraphSpaceStatistics >> collectedObjects [
 ]
 
 { #category : #api }
+GraphSpaceStatistics >> doNotIgnoreReferencesToClasses [
+
+	ignoreReferencesToClasses := false
+]
+
+{ #category : #api }
 GraphSpaceStatistics >> ignore: anObject [
 
 	ignoredObjects add: anObject
@@ -51,7 +57,7 @@ GraphSpaceStatistics >> ignoreWhen: aBlock [
 GraphSpaceStatistics >> initialize [
 
 	super initialize.
-	ignoreReferencesToClasses := false.
+	self ignoreReferencesToClasses.
 	ignoredObjects := IdentitySet new.
 	ignorePredicates := OrderedCollection new.
 	walker := GraphWalker new
